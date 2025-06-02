@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 
@@ -8,14 +9,20 @@ class Contributor(models.Model):
     last_name = models.CharField(max_length=100)
     email = models.EmailField(max_length=254)
 
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
 
 class Organization(models.Model):
     """
     An organization is the highest level entity, for example a company.
     """
     name = models.CharField(max_length=100)
-    projects = models.one
+    organization_url = models.URLField(blank=True)
     members = models.ManyToManyField(Contributor, related_name="organizations")
+
+    def __str__(self):
+        return f"{self.name}"
 
 
 class Project(models.Model):
@@ -23,8 +30,12 @@ class Project(models.Model):
     A project is a product, service, website, game etc. that contributors make contributions to.
     """
     name = models.CharField(max_length=50)
+    project_url = models.URLField(blank=True)
     organization = models.ForeignKey(
         Organization, on_delete=models.CASCADE, related_name="projects")
+
+    def __str__(self):
+        return f"{self.name}"
 
 
 class Team(models.Model):
@@ -36,12 +47,21 @@ class Team(models.Model):
         Organization, on_delete=models.CASCADE, related_name="teams")
     members = models.ManyToManyField(Contributor, related_name="teams")
 
+    def __str__(self):
+        return f"{self.organization}: {self.name} ({self.members.count()} Members)"
+
 
 class Currency(models.Model):
     name = models.CharField(max_length=20)
     code = models.CharField(max_length=3, unique=True)
     symbol = models.CharField(max_length=5, default="$")
     decimal_places = models.PositiveSmallIntegerField(default=2)
+
+    def __str__(self):
+        return f"{self.code} ({self.symbol})"
+
+    class Meta:
+        verbose_name_plural = "Currencies"
 
 
 class Role(models.Model):
@@ -71,9 +91,11 @@ class Contribution(models.Model):
     contribution_type = models.CharField(
         max_length=20, choices=ContributionType.choices, default=ContributionType.HOURLY_WORK)
     description = models.TextField()
-    work_hours = models.FloatField()
-    work_units = models.FloatField()
-    contribution_value = models.DecimalField(max_digits=9, decimal_places=2)
+    work_hours = models.FloatField(blank=True, null=True)
+    work_units = models.FloatField(blank=True, null=True)
+    date_completed = models.DateTimeField(default=timezone.now, null=True)
+    contribution_value = models.DecimalField(
+        max_digits=9, decimal_places=2, blank=True, null=True)
     contributor = models.ForeignKey(
         Contributor, on_delete=models.CASCADE, related_name="contributions")
     project = models.ForeignKey(
@@ -83,5 +105,24 @@ class Contribution(models.Model):
 
 
 class Revenue(models.Model):
+    """
+    A model for tracking revenue earned by the organizationn.
+    """
     source_name = models.CharField(max_length=100)
-    source_description = models.TextField()
+    source_description = models.TextField(blank=True)
+    source_url = models.URLField(blank=True)
+    date_received = models.DateTimeField(default=timezone.now, null=True)
+    gross_amount = models.DecimalField(
+        max_digits=9, decimal_places=2, default=0)
+    net_amount = models.DecimalField(
+        max_digits=9, decimal_places=2, default=0)
+    currency = models.ForeignKey(Currency, on_delete=models.PROTECT, null=True)
+    project = models.ForeignKey(
+        Project, on_delete=models.CASCADE, related_name="revenue_items", null=True)
+
+    def __str__(self):
+        return f"{self.date_received.strftime('%Y-%m-%d %H:%M')} - {self.source_name}: {self.currency.symbol}{self.gross_amount} ({self.currency.symbol}{self.net_amount})"
+
+    class Meta:
+        verbose_name = "Revenue Item"
+        verbose_name_plural = "Revenue Items"
