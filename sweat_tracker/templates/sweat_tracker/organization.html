@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ organization.name }}
+{% endblock %}
+
+{% block content %}
+  <h1>{{ organization.name }}</h1>
+  <h2>Contributors</h2>
+  {% include 'sweat_tracker/components/contributor_list.html' with contributors=organization.members.all %}
+  <p>Total Revenue:</p>
+{% endblock %}

@@ -3,6 +3,10 @@ from .models import Organization, Contributor, Project, Team, Contribution, Role
 # Register your models here.
 
 
+class OrganizationAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug": ("name",)}
+
+
 class ContributionAdmin(admin.ModelAdmin):
     list_filter = ("contribution_type", "project",
                    "contributor", "date_completed")
@@ -16,7 +20,7 @@ class RevenueAdmin(admin.ModelAdmin):
                     "gross_amount", "net_amount", "date_received")
 
 
-admin.site.register(Organization)
+admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(Project)
 admin.site.register(Contributor)
 admin.site.register(Team)

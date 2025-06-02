@@ -20,6 +20,7 @@ class Organization(models.Model):
     name = models.CharField(max_length=100)
     organization_url = models.URLField(blank=True)
     members = models.ManyToManyField(Contributor, related_name="organizations")
+    slug = models.SlugField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.name}"
@@ -126,3 +127,5 @@ class Revenue(models.Model):
     class Meta:
         verbose_name = "Revenue Item"
         verbose_name_plural = "Revenue Items"
+
+# class Payouts

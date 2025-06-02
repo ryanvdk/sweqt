@@ -1,0 +1,7 @@
+<ul>
+  {% for organization in organizations %}
+    <li>
+      <a href="{% url 'organization' organization.slug %}">{{ organization.name }}</a>
+    </li>
+  {% endfor %}
+</ul>
