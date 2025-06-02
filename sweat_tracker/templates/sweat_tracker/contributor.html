@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}
+  {{ contributor }}
+{% endblock %}
+
+{% block breadcrumb %}
+  <li>
+    <a href="{% url 'organization' organization.slug %}">{{ organization }}</a>
+  </li>
+  <li>
+    <a href="{% url 'contributor' organization.slug contributor.slug %}">{{ contributor }}</a>
+  </li>
+{% endblock %}
+
+{% block content %}
+  <h1>{{ contributor }}</h1>
+
+  {% include 'sweat_tracker/components/contributions_list.html' with organization=organization contributions=contributor.contributions.all %}
+{% endblock %}

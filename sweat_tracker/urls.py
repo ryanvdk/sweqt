@@ -6,5 +6,9 @@ urlpatterns = [
     path('<slug:organization>/',
          views.OrganizationView.as_view(), name="organization"),
     path('<slug:organization>/contributors/<slug:contributor>/',
-         views.OrganizationView.as_view(), name="organization")
+         views.ContributorView.as_view(), name="contributor"),
+    path('<slug:organization>/projects/<slug:project>/',
+         views.ProjectView.as_view(), name="project"),
+    path('<slug:organization>/contributions/<int:pk>/',
+         views.ContributionView.as_view(), name="contribution")
 ]

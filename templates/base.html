@@ -10,6 +10,18 @@
     </title>
   </head>
   <body>
+    <header>
+      <nav>
+        <ul>
+          <li>
+            <a href="{% url 'index' %}">Index</a>
+          </li>
+          {% block breadcrumb %}
+
+          {% endblock %}
+        </ul>
+      </nav>
+    </header>
     {% block content %}
 
     {% endblock %}

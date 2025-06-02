@@ -8,6 +8,7 @@ class Contributor(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField(max_length=254)
+    slug = models.SlugField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -32,6 +33,7 @@ class Project(models.Model):
     """
     name = models.CharField(max_length=50)
     project_url = models.URLField(blank=True)
+    slug = models.SlugField(blank=True, null=True)
     organization = models.ForeignKey(
         Organization, on_delete=models.CASCADE, related_name="projects")
 
@@ -103,6 +105,9 @@ class Contribution(models.Model):
         Project, on_delete=models.CASCADE, related_name="contributions")
     is_approved = models.BooleanField(default=False)
     currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return f"{self.date_completed.strftime('%Y-%m-%d %H:%M')} - {self.project}: {self.description}"
 
 
 class Revenue(models.Model):

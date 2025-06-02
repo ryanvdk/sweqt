@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}
+  Contribution
+{% endblock %}
+
+{% block breadcrumb %}
+  <li>
+    <a href="{% url 'organization' organization.slug %}">{{ organization }}</a>
+  </li>
+  <li>
+    <a href="{% url 'project' organization.slug contribution.project.slug %}">{{ contribution.project }}</a>
+  </li>
+  <li>
+    <a href="{% url 'contributor' organization.slug contribution.contributor.slug %}">{{ contribution.contributor }}</a>
+  </li>
+{% endblock %}
+
+{% block content %}
+  <h1>Contribution</h1>
+  <h2>{{ contribution }}</h2>
+{% endblock %}

@@ -1,5 +1,8 @@
+<h2>Contributors</h2>
 <ul>
   {% for contributor in contributors %}
-    <li>{{ contributor.first_name }}</li>
+    <li>
+      <a href="{% url 'contributor' organization.slug contributor.slug %}">{{ contributor }}</a>
+    </li>
   {% endfor %}
 </ul>

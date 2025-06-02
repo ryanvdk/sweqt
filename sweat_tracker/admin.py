@@ -3,7 +3,15 @@ from .models import Organization, Contributor, Project, Team, Contribution, Role
 # Register your models here.
 
 
+class ContributorAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug": ("first_name", "last_name")}
+
+
 class OrganizationAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug": ("name",)}
+
+
+class ProjectAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
 
 
@@ -21,8 +29,8 @@ class RevenueAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Organization, OrganizationAdmin)
-admin.site.register(Project)
-admin.site.register(Contributor)
+admin.site.register(Project, ProjectAdmin)
+admin.site.register(Contributor, ContributorAdmin)
 admin.site.register(Team)
 admin.site.register(Contribution, ContributionAdmin)
 admin.site.register(Role)

@@ -4,9 +4,16 @@
   {{ organization.name }}
 {% endblock %}
 
+{% block breadcrumb %}
+  <li>
+    <a href="{% url 'organization' organization.slug %}">{{ organization.name }}</a>
+  </li>
+{% endblock %}
+
 {% block content %}
   <h1>{{ organization.name }}</h1>
-  <h2>Contributors</h2>
-  {% include 'sweat_tracker/components/contributor_list.html' with contributors=organization.members.all %}
   <p>Total Revenue:</p>
+
+  {% include 'sweat_tracker/components/contributor_list.html' with organization=organization contributors=organization.members.all %}
+  {% include 'sweat_tracker/components/project_list.html' with organization=organization projects=organization.projects.all %}
 {% endblock %}

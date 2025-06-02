@@ -1,0 +1,8 @@
+<h2>Contributions</h2>
+<ul>
+  {% for contribution in contributions %}
+    <li>
+      <a href="{% url 'contribution' organization.slug contribution.pk %}">{{ contribution }}</a>
+    </li>
+  {% endfor %}
+</ul>

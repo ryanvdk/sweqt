@@ -1,0 +1,8 @@
+<h2>Projects</h2>
+<ul>
+  {% for project in projects %}
+    <li>
+      <a href="{% url 'project' organization.slug project.slug %}">{{ project }}</a>
+    </li>
+  {% endfor %}
+</ul>
