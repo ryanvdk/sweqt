@@ -12,9 +12,12 @@
 
 {% block content %}
   <h1>{{ organization.name }}</h1>
-  <p>Total Revenue:</p>
+  <p>Total Contribution Value: {{ organization.total_contribution_value }}</p>
+  <p>Total Gross Revenue: {{ organization.gross_revenue }}</p>
+  <p>Total Net Revenue: {{ organization.net_revenue }}</p>
 
   {% include 'sweat_tracker/components/contributor_list.html' with organization=organization contributors=organization.members.all %}
   {% include 'sweat_tracker/components/project_list.html' with organization=organization projects=organization.projects.all %}
   {% include 'sweat_tracker/components/revenue_list.html' with revenue_items=organization.revenue_items.all %}
+  {% include 'sweat_tracker/components/role_list.html' with roles=organization.roles.all %}
 {% endblock %}

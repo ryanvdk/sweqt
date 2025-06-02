@@ -14,6 +14,9 @@
 
 {% block content %}
   <h1>{{ project }}</h1>
+  <p>Total Project Contribution Value: {{ project.total_contribution_value }}</p>
+  <p>Total Gross Project Revenue: {{ project.gross_revenue }}</p>
+  <p>Total Net Project Revenue: {{ project.net_revenue }}</p>
 
   {% include 'sweat_tracker/components/contributions_list.html' with contributions=project.contributions.all %}
   {% include 'sweat_tracker/components/revenue_list.html' with revenue_items=project.revenue_items.all %}

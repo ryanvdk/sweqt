@@ -14,6 +14,9 @@
 
 {% block content %}
   <h1>{{ contributor }}</h1>
-
+  <p>Total Contribution Value: {{ contributor.total_contribution_value }}</p>
   {% include 'sweat_tracker/components/contributions_list.html' with organization=organization contributions=contributor.contributions.all %}
+  {% include 'sweat_tracker/components/role_list.html' with organization=organization roles=contributor.roles.all %}
+  {% include 'sweat_tracker/components/organization_list.html' with organizations=contributor.organizations.all %}
+  {% include 'sweat_tracker/components/project_list.html' with organization=organization projects=contributor.projects %}
 {% endblock %}

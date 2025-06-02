@@ -5,10 +5,6 @@ from .models import Organization, Contributor, Project, Contribution, Revenue
 # Create your views here.
 
 
-def calculateGrossRevenue():
-    pass
-
-
 class IndexView(TemplateView):
     template_name = "sweat_tracker/index.html"
 
@@ -24,8 +20,9 @@ class OrganizationView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         organization_slug = self.kwargs.get("organization")
-        context["organization"] = Organization.objects.get(
+        organization = Organization.objects.get(
             slug=organization_slug)
+        context["organization"] = organization
         return context
 
 

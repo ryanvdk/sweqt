@@ -4,7 +4,18 @@ from django.utils import timezone
 # Create your models here.
 
 
-class Contributor(models.Model):
+class BaseModel():
+    def gross_revenue(self):
+        return self.revenue_items.aggregate(total=models.Sum("gross_amount"))["total"] or 0
+
+    def net_revenue(self):
+        return self.revenue_items.aggregate(total=models.Sum("net_amount"))["total"] or 0
+
+    def total_contribution_value(self):
+        return self.contributions.aggregate(total=models.Sum("contribution_value"))["total"] or 0
+
+
+class Contributor(models.Model, BaseModel):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField(max_length=254)
@@ -13,8 +24,15 @@ class Contributor(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
+    def projects(self):
+        result = []
+        for contribution in self.contributions.all():
+            if contribution.project not in result:
+                result.append(contribution.project)
+        return result
 
-class Organization(models.Model):
+
+class Organization(models.Model, BaseModel):
     """
     An organization is the highest level entity, for example a company.
     """
@@ -27,7 +45,7 @@ class Organization(models.Model):
         return f"{self.name}"
 
 
-class Project(models.Model):
+class Project(models.Model, BaseModel):
     """
     A project is a product, service, website, game etc. that contributors make contributions to.
     """
@@ -82,6 +100,9 @@ class Role(models.Model):
     hourly_rate = models.DecimalField(max_digits=9, decimal_places=2)
     currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
 
+    def __str__(self):
+        return f"{self.organization} - {self.name}: {self.currency.symbol}{self.hourly_rate}/hour | {self.contributors.count()} People"
+
 
 class Contribution(models.Model):
     """
@@ -105,6 +126,8 @@ class Contribution(models.Model):
         Role, on_delete=models.PROTECT, related_name="contributions", blank=True, null=True)
     project = models.ForeignKey(
         Project, on_delete=models.CASCADE, related_name="contributions")
+    organization = models.ForeignKey(
+        Organization, on_delete=models.CASCADE, related_name="contributions", blank=True, null=True)
     is_approved = models.BooleanField(default=False)
     currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
 
