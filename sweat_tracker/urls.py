@@ -10,5 +10,8 @@ urlpatterns = [
     path('<slug:organization>/projects/<slug:project>/',
          views.ProjectView.as_view(), name="project"),
     path('<slug:organization>/contributions/<int:pk>/',
-         views.ContributionView.as_view(), name="contribution")
+         views.ContributionView.as_view(), name="contribution"),
+    path('<slug:organization>/revenue/<int:pk>/',
+         views.RevenueItemView.as_view(), name="revenue_item")
+
 ]

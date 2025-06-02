@@ -1,0 +1,8 @@
+<h2>Revenue</h2>
+<ul>
+  {% for item in revenue_items %}
+    <li>
+      <a href="{% url 'revenue_item' item.organization.slug item.pk %}">{{ item }}</a>
+    </li>
+  {% endfor %}
+</ul>

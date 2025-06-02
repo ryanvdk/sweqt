@@ -101,6 +101,8 @@ class Contribution(models.Model):
         max_digits=9, decimal_places=2, blank=True, null=True)
     contributor = models.ForeignKey(
         Contributor, on_delete=models.CASCADE, related_name="contributions")
+    contributor_role = models.ForeignKey(
+        Role, on_delete=models.PROTECT, related_name="contributions", blank=True, null=True)
     project = models.ForeignKey(
         Project, on_delete=models.CASCADE, related_name="contributions")
     is_approved = models.BooleanField(default=False)
@@ -125,6 +127,8 @@ class Revenue(models.Model):
     currency = models.ForeignKey(Currency, on_delete=models.PROTECT, null=True)
     project = models.ForeignKey(
         Project, on_delete=models.CASCADE, related_name="revenue_items", null=True)
+    organization = models.ForeignKey(
+        Organization, on_delete=models.CASCADE, related_name="revenue_items", null=True)
 
     def __str__(self):
         return f"{self.date_received.strftime('%Y-%m-%d %H:%M')} - {self.source_name}: {self.currency.symbol}{self.gross_amount} ({self.currency.symbol}{self.net_amount})"

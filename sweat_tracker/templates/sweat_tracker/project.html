@@ -16,4 +16,5 @@
   <h1>{{ project }}</h1>
 
   {% include 'sweat_tracker/components/contributions_list.html' with contributions=project.contributions.all %}
+  {% include 'sweat_tracker/components/revenue_list.html' with revenue_items=project.revenue_items.all %}
 {% endblock %}

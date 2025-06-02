@@ -1,8 +1,12 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from .models import Organization, Contributor, Project, Contribution
+from .models import Organization, Contributor, Project, Contribution, Revenue
 
 # Create your views here.
+
+
+def calculateGrossRevenue():
+    pass
 
 
 class IndexView(TemplateView):
@@ -61,6 +65,20 @@ class ContributionView(TemplateView):
         contribution_pk = self.kwargs.get("pk")
         context["contribution"] = Contribution.objects.get(
             pk=contribution_pk)
+        organization_slug = self.kwargs.get("organization")
+        context["organization"] = Organization.objects.get(
+            slug=organization_slug)
+        return context
+
+
+class RevenueItemView(TemplateView):
+    template_name = "sweat_tracker/revenue_item.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        revenue_pk = self.kwargs.get("pk")
+        context["revenue_item"] = Revenue.objects.get(
+            pk=revenue_pk)
         organization_slug = self.kwargs.get("organization")
         context["organization"] = Organization.objects.get(
             slug=organization_slug)

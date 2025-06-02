@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}
+  Revenue Item
+{% endblock %}
+
+{% block breadcrumb %}
+  <li>
+    <a href="{% url 'organization' organization.slug %}">{{ organization }}</a>
+  </li>
+  <li>
+    <a href="{% url 'project' organization.slug revenue_item.project.slug %}">{{ revenue_item.project }}</a>
+  </li>
+{% endblock %}
+
+{% block content %}
+  <h1>Revenue Item</h1>
+  <h2>{{ revenue_item }}</h2>
+{% endblock %}

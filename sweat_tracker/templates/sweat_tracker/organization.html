@@ -16,4 +16,5 @@
 
   {% include 'sweat_tracker/components/contributor_list.html' with organization=organization contributors=organization.members.all %}
   {% include 'sweat_tracker/components/project_list.html' with organization=organization projects=organization.projects.all %}
+  {% include 'sweat_tracker/components/revenue_list.html' with revenue_items=organization.revenue_items.all %}
 {% endblock %}
