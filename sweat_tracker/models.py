@@ -58,6 +58,13 @@ class Project(models.Model, BaseModel):
     def __str__(self):
         return f"{self.name}"
 
+    def contributors(self):
+        result = []
+        for contribution in self.contributions.all():
+            if contribution.contributor not in result:
+                result.append(contribution.contributor)
+        return result
+
 
 class Team(models.Model):
     """
