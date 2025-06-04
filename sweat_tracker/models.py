@@ -114,19 +114,23 @@ class Role(models.Model):
 class Contribution(models.Model):
     """
     Types of contribution: hourly work, paying an expense, buying materials, investing money.
+    Contribution value should be auto-calculated based on the type of contribution. 
     """
     class ContributionType(models.TextChoices):
         HOURLY_WORK = "hourly_work", "Hourly Work"
         EXPENSE = "expense", "Expense"
+        INVESTMENT = "investment", "Investment"
         WORK_PACKAGE = "work_package", "Work Package"
     contribution_type = models.CharField(
         max_length=20, choices=ContributionType.choices, default=ContributionType.HOURLY_WORK)
     description = models.TextField()
-    work_hours = models.FloatField(blank=True, null=True)
-    work_units = models.FloatField(blank=True, null=True)
-    date_completed = models.DateTimeField(default=timezone.now, null=True)
+    units = models.DecimalField(
+        max_digits=9, decimal_places=2, blank=True, null=True, default=0)
+    value_per_unit = models.DecimalField(
+        max_digits=9, decimal_places=2, blank=True, null=True, default=0)
     contribution_value = models.DecimalField(
-        max_digits=9, decimal_places=2, blank=True, null=True)
+        max_digits=9, decimal_places=2, blank=True, null=True, default=0)
+    date_completed = models.DateTimeField(default=timezone.now, null=True)
     contributor = models.ForeignKey(
         Contributor, on_delete=models.CASCADE, related_name="contributions")
     contributor_role = models.ForeignKey(
@@ -138,8 +142,12 @@ class Contribution(models.Model):
     is_approved = models.BooleanField(default=False)
     currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
 
+    def save(self, *args, **kwargs):
+        self.contribution_value = self.units * self.value_per_unit
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f"{self.date_completed.strftime('%Y-%m-%d %H:%M')} - {self.project}: {self.description}"
+        return f"{self.project}: {self.get_contribution_type_display()}: {self.currency.symbol}{self.contribution_value} ({self.date_completed.strftime('%Y-%m-%d %H:%M')})"
 
 
 class Revenue(models.Model):

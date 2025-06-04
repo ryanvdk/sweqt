@@ -18,8 +18,9 @@ class ProjectAdmin(admin.ModelAdmin):
 class ContributionAdmin(admin.ModelAdmin):
     list_filter = ("contribution_type", "project",
                    "contributor", "date_completed")
-    list_display = ("project", "contributor", "contribution_type", "work_hours", "work_units",
-                    "contribution_value", "date_completed")
+    list_display = ("project", "contributor", "contribution_type", "units", "value_per_unit", "contribution_value",
+                    "date_completed")
+    readonly_fields = ("contribution_value",)
 
 
 class RevenueAdmin(admin.ModelAdmin):
